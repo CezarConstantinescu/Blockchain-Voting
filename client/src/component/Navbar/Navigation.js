@@ -17,7 +17,7 @@ export default function Navbar() {
           <NavLink to="/Registration" activeClassName="nav-active">
             <i className="far fa-registered" /> Register
           </NavLink>
-        </li>s
+        </li>
         <li>
           <NavLink to="/Voting" activeClassName="nav-active">
             <i className="fas fa-vote-yea" /> Vote
