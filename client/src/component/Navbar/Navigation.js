@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-
 import "./Navbar.css";
 
 export default function Navbar() {
@@ -16,12 +15,12 @@ export default function Navbar() {
       >
         <li>
           <NavLink to="/Registration" activeClassName="nav-active">
-            <i className="far fa-registered" /> Registration
+            <i className="far fa-registered" /> Register
           </NavLink>
-        </li>
+        </li>s
         <li>
           <NavLink to="/Voting" activeClassName="nav-active">
-            <i className="fas fa-vote-yea" /> Voting
+            <i className="fas fa-vote-yea" /> Vote
           </NavLink>
         </li>
         <li>

@@ -10,13 +10,13 @@ function UserHome(props) {
           <center>{props.el.organizationTitle}</center>
           <table style={{ marginTop: "21px" }}>
             <tr>
-              <th>admin</th>
+              <th>Admin</th>
               <td>
                 {props.el.adminName} ({props.el.adminTitle})
               </td>
             </tr>
             <tr>
-              <th>contact</th>
+              <th>Contact</th>
               <td style={{ textTransform: "none" }}>{props.el.adminEmail}</td>
             </tr>
           </table>

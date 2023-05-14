@@ -18,14 +18,13 @@ const StartEnd = (props) => {
     >
       {!props.elStarted ? (
         <>
-          {/* edit here to display start election Again button */}
+          {}
           {!props.elEnded ? (
             <>
               <div
                 className="container-item attention"
                 style={{ display: "block" }}
               >
-                <h2>Do not forget to add candidates.</h2>
                 <p>
                   Go to{" "}
                   <Link
@@ -36,28 +35,28 @@ const StartEnd = (props) => {
                       textDecoration: "underline",
                     }}
                   >
-                    add candidates
+                    Add candidates
                   </Link>{" "}
                   page.
                 </p>
               </div>
               <div className="container-item">
                 <button type="submit" style={btn}>
-                  Start Election {props.elEnded ? "Again" : null}
+                  Start election {props.elEnded ? "Again" : null}
                 </button>
               </div>
             </>
           ) : (
             <div className="container-item">
               <center>
-                <p>Re-deploy the contract to start election again.</p>
+                <p>Re-deploy the contract to start the election again.</p>
               </center>
             </div>
           )}
           {props.elEnded ? (
             <div className="container-item">
               <center>
-                <p>The election ended.</p>
+                <p>The election has ended.</p>
               </center>
             </div>
           ) : null}
@@ -66,17 +65,16 @@ const StartEnd = (props) => {
         <>
           <div className="container-item">
             <center>
-              <p>The election started.</p>
+              <p>The election has started.</p>
             </center>
           </div>
           <div className="container-item">
             <button
               type="button"
-              // onClick={this.endElection}
               onClick={props.endElFn}
               style={btn}
             >
-              End
+              End election
             </button>
           </div>
         </>

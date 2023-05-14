@@ -5,7 +5,7 @@ const ElectionStatus = (props) => {
     padding: "11px",
     margin: "7px",
     width: "100%",
-    border: "1px solid tomato",
+    border: "1px solid royalblue",
     marginLeft: "auto",
     marginRight: "auto",
     textAlign: "center",
@@ -20,7 +20,7 @@ const ElectionStatus = (props) => {
       className="container-main"
       style={{ borderTop: "1px solid", marginTop: "0px" }}
     >
-      <h3>Election Status</h3>
+      <h3>Election status</h3>
       <div style={electionStatus}>
         <p>Started: {props.elStarted ? "True" : "False"}</p>
         <p>Ended: {props.elEnded ? "True" : "False"}</p>

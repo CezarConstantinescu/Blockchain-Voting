@@ -1,13 +1,9 @@
 import React, { Component } from "react";
-
 import Navbar from "../../Navbar/Navigation";
 import NavbarAdmin from "../../Navbar/NavigationAdmin";
-
 import AdminOnly from "../../AdminOnly";
-
 import getWeb3 from "../../../getWeb3";
 import Election from "../../../contracts/Election.json";
-
 import "./Verification.css";
 
 export default class Registration extends Component {
@@ -23,20 +19,14 @@ export default class Registration extends Component {
     };
   }
 
-  // refreshing once
   componentDidMount = async () => {
     if (!window.location.hash) {
       window.location = window.location + "#loaded";
       window.location.reload();
     }
     try {
-      // Get network provider and web3 instance.
       const web3 = await getWeb3();
-
-      // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
-
-      // Get the contract instance.
       const networkId = await web3.eth.net.getId();
       const deployedNetwork = Election.networks[networkId];
       const instance = new web3.eth.Contract(
@@ -44,27 +34,27 @@ export default class Registration extends Component {
         deployedNetwork && deployedNetwork.address
       );
 
-      // Set web3, accounts, and contract to the state, and then proceed with an
-      // example of interacting with the contract's methods.
       this.setState({ web3, ElectionInstance: instance, account: accounts[0] });
 
-      // Total number of candidates
+      // total number of candidates
       const candidateCount = await this.state.ElectionInstance.methods
         .getTotalCandidate()
         .call();
       this.setState({ candidateCount: candidateCount });
 
-      // Admin account and verification
+      // admin account verification
       const admin = await this.state.ElectionInstance.methods.getAdmin().call();
       if (this.state.account === admin) {
         this.setState({ isAdmin: true });
       }
-      // Total number of voters
+
+      // total number of voters
       const voterCount = await this.state.ElectionInstance.methods
         .getTotalVoter()
         .call();
       this.setState({ voterCount: voterCount });
-      // Loading all the voters
+
+      // loading all the voters
       for (let i = 0; i < this.state.voterCount; i++) {
         const voterAddress = await this.state.ElectionInstance.methods
           .voters(i)
@@ -81,11 +71,12 @@ export default class Registration extends Component {
           isRegistered: voter.isRegistered,
         });
       }
+
       this.setState({ voters: this.state.voters });
+
     } catch (error) {
-      // Catch any errors for any of the above operations.
       alert(
-        `Failed to load web3, accounts, or contract. Check console for details.`
+        `Failed to load web3, accounts, or contract.`
       );
       console.error(error);
     }
@@ -105,7 +96,7 @@ export default class Registration extends Component {
             <table>
               <tr>
                 <th>Name</th>
-                <th>Phone</th>
+                <th>Phone number</th>
                 <th>Voted</th>
               </tr>
               <tr>
@@ -130,7 +121,7 @@ export default class Registration extends Component {
               <td>{voter.name}</td>
             </tr>
             <tr>
-              <th>Phone</th>
+              <th>Phone number</th>
               <td>{voter.phone}</td>
             </tr>
             <tr>
@@ -164,7 +155,7 @@ export default class Registration extends Component {
       return (
         <>
           {this.state.isAdmin ? <NavbarAdmin /> : <Navbar />}
-          <center>Loading Web3, accounts, and contract...</center>
+          <center>Loading...</center>
         </>
       );
     }
@@ -181,9 +172,9 @@ export default class Registration extends Component {
         <NavbarAdmin />
         <div className="container-main">
           <h3>Verification</h3>
-          <small>Total Voters: {this.state.voters.length}</small>
+          <small>Total voters: {this.state.voters.length}</small>
           {this.state.voters.length < 1 ? (
-            <div className="container-item info">None has registered yet.</div>
+            <div className="container-item info">Nobody has registered yet.</div>
           ) : (
             <>
               <div className="container-item info">

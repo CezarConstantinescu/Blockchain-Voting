@@ -1,17 +1,10 @@
-// Node modules
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-
-// Components
 import Navbar from "../Navbar/Navigation";
 import NavbarAdmin from "../Navbar/NavigationAdmin";
 import NotInit from "../NotInit";
-
-// Contract
 import getWeb3 from "../../getWeb3";
 import Election from "../../contracts/Election.json";
-
-// CSS
 import "./Voting.css";
 
 export default class Voting extends Component {
@@ -37,19 +30,13 @@ export default class Voting extends Component {
     };
   }
   componentDidMount = async () => {
-    // refreshing once
     if (!window.location.hash) {
       window.location = window.location + "#loaded";
       window.location.reload();
     }
     try {
-      // Get network provider and web3 instance.
       const web3 = await getWeb3();
-
-      // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
-
-      // Get the contract instance.
       const networkId = await web3.eth.net.getId();
       const deployedNetwork = Election.networks[networkId];
       const instance = new web3.eth.Contract(
@@ -57,27 +44,25 @@ export default class Voting extends Component {
         deployedNetwork && deployedNetwork.address
       );
 
-      // Set web3, accounts, and contract to the state, and then proceed with an
-      // example of interacting with the contract's methods.
       this.setState({
         web3: web3,
         ElectionInstance: instance,
         account: accounts[0],
       });
 
-      // Get total number of candidates
+      // getting total number of candidates
       const candidateCount = await this.state.ElectionInstance.methods
         .getTotalCandidate()
         .call();
       this.setState({ candidateCount: candidateCount });
 
-      // Get start and end values
+      // getting start and end values
       const start = await this.state.ElectionInstance.methods.getStart().call();
       this.setState({ isElStarted: start });
       const end = await this.state.ElectionInstance.methods.getEnd().call();
       this.setState({ isElEnded: end });
 
-      // Loading Candidates details
+      // loading candidates' details
       for (let i = 1; i <= this.state.candidateCount; i++) {
         const candidate = await this.state.ElectionInstance.methods
           .candidateDetails(i - 1)
@@ -90,7 +75,7 @@ export default class Voting extends Component {
       }
       this.setState({ candidates: this.state.candidates });
 
-      // Loading current voter
+      // loading current voter's details
       const voter = await this.state.ElectionInstance.methods
         .voterDetails(this.state.account)
         .call();
@@ -105,15 +90,14 @@ export default class Voting extends Component {
         },
       });
 
-      // Admin account and verification
+      // admin account verification
       const admin = await this.state.ElectionInstance.methods.getAdmin().call();
       if (this.state.account === admin) {
         this.setState({ isAdmin: true });
       }
     } catch (error) {
-      // Catch any errors for any of the above operations.
       alert(
-        `Failed to load web3, accounts, or contract. Check console for details.`
+        `Failed to load web3, accounts, or contract.`
       );
       console.error(error);
     }
@@ -126,14 +110,16 @@ export default class Voting extends Component {
         .send({ from: this.state.account, gas: 1000000 });
       window.location.reload();
     };
+
     const confirmVote = (id, header) => {
       var r = window.confirm(
-        "Vote for " + header + " with Id " + id + ".\nAre you sure?"
+        "You are voting for " + header + " with Id " + id + ".\nAre you sure?"
       );
       if (r === true) {
         castVote(id);
       }
     };
+    
     return (
       <div className="container-item">
         <div className="candidate-info">
@@ -164,7 +150,7 @@ export default class Voting extends Component {
       return (
         <>
           {this.state.isAdmin ? <NavbarAdmin /> : <Navbar />}
-          <center>Loading Web3, accounts, and contract...</center>
+          <center>Loading...</center>
         </>
       );
     }
@@ -182,7 +168,7 @@ export default class Voting extends Component {
                   this.state.currentVoter.hasVoted ? (
                     <div className="container-item success">
                       <div>
-                        <strong>You've casted your vote.</strong>
+                        <strong>Your vote has been cast.</strong>
                         <p />
                         <center>
                           <Link
@@ -192,14 +178,14 @@ export default class Voting extends Component {
                               textDecoration: "underline",
                             }}
                           >
-                            See Results
+                            See results
                           </Link>
                         </center>
                       </div>
                     </div>
                   ) : (
                     <div className="container-item info">
-                      <center>Go ahead and cast your vote.</center>
+                      <center>Cast your vote.</center>
                     </div>
                   )
                 ) : (
@@ -217,7 +203,7 @@ export default class Voting extends Component {
                         to="/Registration"
                         style={{ color: "black", textDecoration: "underline" }}
                       >
-                        Registration Page
+                        Registration page
                       </Link>
                     </center>
                   </div>
@@ -228,7 +214,7 @@ export default class Voting extends Component {
                 <small>Total candidates: {this.state.candidates.length}</small>
                 {this.state.candidates.length < 1 ? (
                   <div className="container-item attention">
-                    <center>Not one to vote for.</center>
+                    <center>There is nobody to vote for.</center>
                   </div>
                 ) : (
                   <>
@@ -247,7 +233,7 @@ export default class Voting extends Component {
             <>
               <div className="container-item attention">
                 <center>
-                  <h3>The Election ended.</h3>
+                  <h3>The election has ended.</h3>
                   <br />
                   <Link
                     to="/Results"

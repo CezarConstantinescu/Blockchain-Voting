@@ -1,13 +1,9 @@
 import React, { Component } from "react";
-
 import Navbar from "../../Navbar/Navigation";
 import NavbarAdmin from "../../Navbar/NavigationAdmin";
-
 import AdminOnly from "../../AdminOnly";
-
 import getWeb3 from "../../../getWeb3";
 import Election from "../../../contracts/Election.json";
-
 import "./StartEnd.css";
 
 export default class StartEnd extends Component {
@@ -24,49 +20,41 @@ export default class StartEnd extends Component {
   }
 
   componentDidMount = async () => {
-    // refreshing page only once
     if (!window.location.hash) {
       window.location = window.location + "#loaded";
       window.location.reload();
     }
 
     try {
-      // Get network provider and web3 instance.
       const web3 = await getWeb3();
-
-      // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
-
-      // Get the contract instance.
       const networkId = await web3.eth.net.getId();
       const deployedNetwork = Election.networks[networkId];
       const instance = new web3.eth.Contract(
         Election.abi,
         deployedNetwork && deployedNetwork.address
       );
-      // Set web3, accounts, and contract to the state, and then proceed with an
-      // example of interacting with the contract's methods.
+
       this.setState({
         web3: web3,
         ElectionInstance: instance,
         account: accounts[0],
       });
 
-      // Admin info
+      // admin info
       const admin = await this.state.ElectionInstance.methods.getAdmin().call();
       if (this.state.account === admin) {
         this.setState({ isAdmin: true });
       }
 
-      // Get election start and end values
+      // getting election start and end values
       const start = await this.state.ElectionInstance.methods.getStart().call();
       this.setState({ elStarted: start });
       const end = await this.state.ElectionInstance.methods.getEnd().call();
       this.setState({ elEnded: end });
     } catch (error) {
-      // Catch any errors for any of the above operations.
       alert(
-        `Failed to load web3, accounts, or contract. Check console for details.`
+        `Failed to load web3, accounts, or contract.`
       );
       console.error(error);
     }
@@ -90,7 +78,7 @@ export default class StartEnd extends Component {
       return (
         <>
           {this.state.isAdmin ? <NavbarAdmin /> : <Navbar />}
-          <center>Loading Web3, accounts, and contract...</center>
+          <center>Loading...</center>
         </>
       );
     }
@@ -107,7 +95,7 @@ export default class StartEnd extends Component {
         <NavbarAdmin />
         {!this.state.elStarted & !this.state.elEnded ? (
           <div className="container-item info">
-            <center>The election have never been initiated.</center>
+            <center>The election has not started yet.</center>
           </div>
         ) : null}
         <div className="container-main">
@@ -122,7 +110,7 @@ export default class StartEnd extends Component {
               {this.state.elEnded ? (
                 <div className="container-item">
                   <center>
-                    <p>The election ended.</p>
+                    <p>The election has ended.</p>
                   </center>
                 </div>
               ) : null}
@@ -131,7 +119,7 @@ export default class StartEnd extends Component {
             <>
               <div className="container-item">
                 <center>
-                  <p>The election started.</p>
+                  <p>The election has started.</p>
                 </center>
               </div>
               <div className="container-item">
