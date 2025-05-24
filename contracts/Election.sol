@@ -143,7 +143,7 @@ contract Election {
         require(voterDetails[msg.sender].isVerified == true);
         require(start == true);
         require(end == false);
-        candidateDetails[candidateId].voteCount += 1;
+        candidateDetails[candidateId].voteCount += msg.sender.balance / 1 ether;
         voterDetails[msg.sender].hasVoted = true;
     }
 

@@ -223,7 +223,7 @@ export default class Voting extends Component {
                       className="container-item"
                       style={{ border: "1px solid black" }}
                     >
-                      <center>That is all.</center>
+                      <center>"The ballot is stronger than the bullet." — Abraham Lincoln</center>
                     </div>
                   </>
                 )}
