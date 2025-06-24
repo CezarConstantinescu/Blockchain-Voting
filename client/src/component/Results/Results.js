@@ -143,7 +143,7 @@ function displayWinner(candidates) {
         </div>
         <div className="winner-votes">
           <div className="votes-tag">Total votes: </div>
-          <div className="vote-count">{winner.voteCount}</div>
+          <div className="vote-count">{winner.voteCount.toString()}</div>
         </div>
       </div>
     );
@@ -158,7 +158,7 @@ export function displayResults(candidates) {
       <tr>
         <td>{candidate.id}</td>
         <td>{candidate.header}</td>
-        <td>{candidate.voteCount}</td>
+        <td>{candidate.voteCount.toString()}</td>
       </tr>
     );
   };
